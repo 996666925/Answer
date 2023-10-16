@@ -7,12 +7,14 @@
 		<NoWarn>1701;1702;1591</NoWarn>
 		<DocumentationFile>Answer.Application.xml</DocumentationFile>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 
 	<ItemGroup>
 		<None Remove="applicationsettings.json" />
 		<None Remove="Answer.Application.xml" />
+		<None Remove="System\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -26,7 +28,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="System\Services\" />
+	  <Compile Remove="System\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Remove="System\**" />
 	</ItemGroup>
 
 </Project>

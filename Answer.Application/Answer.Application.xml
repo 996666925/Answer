@@ -4,16 +4,277 @@
         <name>Answer.Application</name>
     </assembly>
     <members>
-        <member name="T:Answer.Application.SystemAppService">
+        <member name="T:Answer.Application.Const.ClaimConst">
             <summary>
-            系统服务接口
+            Claim相关常量
             </summary>
         </member>
-        <member name="M:Answer.Application.SystemAppService.GetDescription">
+        <member name="F:Answer.Application.Const.ClaimConst.UserId">
             <summary>
-            获取系统描述
+            用户Id
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Const.ClaimConst.Account">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Const.ClaimConst.NickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Const.ClaimConst.AccountType">
+            <summary>
+            账号类型
+            </summary>
+        </member>
+        <member name="T:Answer.Application.Entity.User">
+            <summary>
+            系统用户表
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Account">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.NickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Sex">
+            <summary>
+            性别-男_1、女_2
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Age">
+            <summary>
+            年龄
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Birthday">
+            <summary>
+            出生日期
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Nation">
+            <summary>
+            民族
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Phone">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.Introduction">
+            <summary>
+            个人简介
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.AccountType">
+            <summary>
+            账号类型
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.LastLoginIp">
+            <summary>
+            最新登录Ip
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.LastLoginAddress">
+            <summary>
+            最新登录地点
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Entity.User.LastLoginTime">
+            <summary>
+            最新登录时间
+            </summary>
+        </member>
+        <member name="T:Answer.Application.Enum.ErrorCodeEnum">
+            <summary>
+            系统错误码
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.ErrorCodeEnum.D0001">
+            <summary>
+            用户名不存在
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.ErrorCodeEnum.D0002">
+            <summary>
+            账号已被冻结
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.ErrorCodeEnum.D0003">
+            <summary>
+            密码不正确
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.ErrorCodeEnum.D0004">
+            <summary>
+            用户名已存在
+            </summary>
+        </member>
+        <member name="T:Answer.Application.Enum.GenderEnum">
+            <summary>
+            性别枚举
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.GenderEnum.Male">
+            <summary>
+            男
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.GenderEnum.Female">
+            <summary>
+            女
+            </summary>
+        </member>
+        <member name="T:Answer.Application.Enum.StatusEnum">
+            <summary>
+            通用状态枚举
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.StatusEnum.Enable">
+            <summary>
+            启用
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.StatusEnum.Disable">
+            <summary>
+            停用
+            </summary>
+        </member>
+        <member name="T:Answer.Application.Enum.UserTypeEnum">
+            <summary>
+            账号类型枚举
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.UserTypeEnum.SuperAdmin">
+            <summary>
+            超级管理员
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.UserTypeEnum.SysAdmin">
+            <summary>
+            系统管理员
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.UserTypeEnum.NormalUser">
+            <summary>
+            普通账号
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.UserTypeEnum.Member">
+            <summary>
+            会员
+            </summary>
+        </member>
+        <member name="T:Answer.Application.Service.Auth.AuthService">
+            <summary>
+            系统登录授权服务
+            </summary>
+        </member>
+        <member name="M:Answer.Application.Service.Auth.AuthService.#ctor(Answer.Core.Repository{Answer.Application.Entity.User},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            系统登录授权服务
+            </summary>
+        </member>
+        <member name="M:Answer.Application.Service.Auth.AuthService.PostLogin(Answer.Application.Service.Auth.Dto.LoginInput)">
+            <summary>
+            登录接口
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.Auth.AuthService.CreateToken(Answer.Application.Entity.User)">
+            <summary>
+            生成Token令牌
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Answer.Application.Service.Auth.Dto.LoginInput.Account">
+            <summary>
+            账号
+            </summary>
+            <example>admin</example>
+        </member>
+        <member name="P:Answer.Application.Service.Auth.Dto.LoginInput.Password">
+            <summary>
+            密码
+            </summary>
+            <example>123456</example>
+        </member>
+        <member name="P:Answer.Application.Service.Auth.Dto.LoginInput.CodeId">
+            <summary>
+            验证码Id
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.Auth.Dto.LoginInput.Code">
+            <summary>
+            验证码
+            </summary>
+        </member>
+        <member name="T:Answer.Application.Service.Auth.Dto.LoginOutput">
+            <summary>
+            用户登录结果
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.Auth.Dto.LoginOutput.AccessToken">
+            <summary>
+            令牌Token
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.Auth.Dto.LoginOutput.RefreshToken">
+            <summary>
+            刷新Token
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.Account">
+            <summary>
+            账号
+            </summary>
+            <example>admin</example>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.Password">
+            <summary>
+            密码
+            </summary>
+            <example>123456</example>
+        </member>
+        <member name="T:Answer.Application.Service.User.UserService">
+            <summary>
+            用户服务
+            </summary>
+        </member>
+        <member name="M:Answer.Application.Service.User.UserService.#ctor(Answer.Core.Repository{Answer.Application.Entity.User})">
+            <summary>
+            用户服务
+            </summary>
         </member>
     </members>
 </doc>

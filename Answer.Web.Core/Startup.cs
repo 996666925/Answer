@@ -1,4 +1,5 @@
-﻿using Furion;
+﻿using Answer.Core;
+using Furion;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ public class Startup : AppStartup
     {
         services.AddConsoleFormatter();
         services.AddJwt<JwtHandler>();
+        services.AddSqlsugar();
 
         services.AddCorsAccessor();
 

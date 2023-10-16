@@ -1,6 +1,8 @@
 ﻿using Furion;
 using SqlSugar;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Answer.Core;
 
@@ -17,6 +19,22 @@ public static class DbContext
         App.GetConfig<List<ConnectionConfig>>("ConnectionConfigs")
         , db =>
         {
+            
+            
             // 这里配置全局事件，比如拦截执行 SQL
         });
+    
+    public static void AddSqlsugar(this IServiceCollection services)
+    {
+        services.AddSingleton<ISqlSugarClient>(Instance);
+        services.AddScoped(typeof(Repository<>));
+    }
+}
+
+public class Repository<T> : SimpleClient<T> where T : class, new()
+{
+    public Repository(ISqlSugarClient context) : base(context)
+    {
+        base.Context = context;
+    }
 }
