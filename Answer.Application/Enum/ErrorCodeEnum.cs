@@ -30,4 +30,16 @@ public enum ErrorCodeEnum
     /// </summary>
     [ErrorCodeItemMetadata("用户名已存在")]
     D0004,
+    
+    /// <summary>
+    /// 问题不存在
+    /// </summary>
+    [ErrorCodeItemMetadata("问题不存在")]
+    Q0001,
+    
+    /// <summary>
+    /// 评论不存在
+    /// </summary>
+    [ErrorCodeItemMetadata("评论不存在")]
+    Q0002,
 }

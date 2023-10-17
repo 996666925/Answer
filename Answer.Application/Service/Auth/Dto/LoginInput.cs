@@ -1,5 +1,8 @@
 ﻿namespace Answer.Application.Service.Auth.Dto;
 
+/// <summary>
+/// 用户登录输入内容
+/// </summary>
 public class LoginInput
 {
     /// <summary>

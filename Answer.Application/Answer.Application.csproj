@@ -35,4 +35,9 @@
 	  <EmbeddedResource Remove="System\**" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="9.1.0" />
+	  <PackageReference Include="StackExchange.Redis.Extensions.System.Text.Json" Version="9.1.0" />
+	</ItemGroup>
+
 </Project>

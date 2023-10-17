@@ -16,3 +16,5 @@ global using SqlSugar;
 global using Answer.Core;
 global using System.ComponentModel;
 global using Answer.Application.Const;
+global using System.Security.Claims;
+global using Answer.Application.Enum;

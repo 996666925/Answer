@@ -29,6 +29,11 @@
             账号类型
             </summary>
         </member>
+        <member name="T:Answer.Application.Entity.UQMapping">
+            <summary>
+            用户和问题之间的中间表,为了实现收藏问题
+            </summary>
+        </member>
         <member name="T:Answer.Application.Entity.User">
             <summary>
             系统用户表
@@ -114,6 +119,11 @@
             最新登录时间
             </summary>
         </member>
+        <member name="T:Answer.Application.Entity.UUMapping">
+            <summary>
+            用户和用户之间的中间表,为了实现关注用户(是A关注了B)
+            </summary>
+        </member>
         <member name="T:Answer.Application.Enum.ErrorCodeEnum">
             <summary>
             系统错误码
@@ -139,6 +149,16 @@
             用户名已存在
             </summary>
         </member>
+        <member name="F:Answer.Application.Enum.ErrorCodeEnum.Q0001">
+            <summary>
+            问题不存在
+            </summary>
+        </member>
+        <member name="F:Answer.Application.Enum.ErrorCodeEnum.Q0002">
+            <summary>
+            评论不存在
+            </summary>
+        </member>
         <member name="T:Answer.Application.Enum.GenderEnum">
             <summary>
             性别枚举
@@ -148,6 +168,7 @@
             <summary>
             男
             </summary>
+            <example>1</example>
         </member>
         <member name="F:Answer.Application.Enum.GenderEnum.Female">
             <summary>
@@ -194,6 +215,31 @@
             会员
             </summary>
         </member>
+        <member name="T:Answer.Application.Service.Answer.AnswerService">
+            <summary>
+            评论服务
+            </summary>
+        </member>
+        <member name="M:Answer.Application.Service.Answer.AnswerService.#ctor(Answer.Core.Repository{Answer.Application.Entity.Answer})">
+            <summary>
+            评论服务
+            </summary>
+        </member>
+        <member name="M:Answer.Application.Service.Answer.AnswerService.Post(Answer.Application.Service.Answer.Dto.AnswerDto)">
+            <summary>
+            创建评论接口
+            </summary>
+            <param name="answerDto">parent填问题Id或评论Id,写那个就是评论哪个</param>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.Answer.AnswerService.Delete(System.Int64)">
+            <summary>
+            删除评论接口
+            </summary>
+            <param name="answerId"></param>
+            <returns></returns>
+            <exception cref="T:Furion.FriendlyException.AppFriendlyException"></exception>
+        </member>
         <member name="T:Answer.Application.Service.Auth.AuthService">
             <summary>
             系统登录授权服务
@@ -216,6 +262,11 @@
             </summary>
             <param name="user"></param>
             <returns></returns>
+        </member>
+        <member name="T:Answer.Application.Service.Auth.Dto.LoginInput">
+            <summary>
+            用户登录输入内容
+            </summary>
         </member>
         <member name="P:Answer.Application.Service.Auth.Dto.LoginInput.Account">
             <summary>
@@ -254,6 +305,65 @@
             刷新Token
             </summary>
         </member>
+        <member name="T:Answer.Application.Service.Question.QuestionService">
+            <summary>
+            问题服务
+            </summary>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.#ctor(Answer.Core.Repository{Answer.Application.Entity.Question},Answer.Core.Repository{Answer.Application.Entity.Answer},Answer.Core.Repository{Answer.Application.Entity.UQMapping})">
+            <summary>
+            问题服务
+            </summary>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.Post(Answer.Application.Service.Question.Dto.QuestionDto)">
+            <summary>
+            创建问题接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.Get(System.Int64)">
+            <summary>
+            查询问题接口
+            </summary>
+            <param name="questionId"></param>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.Put(Answer.Application.Service.Question.Dto.QuestionDto)">
+            <summary>
+            修改问题内容接口
+            </summary>
+            <param name="questionDto"></param>
+            <returns></returns>
+            <exception cref="T:Furion.FriendlyException.AppFriendlyException"></exception>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.GetRandom(System.Int32)">
+            <summary>
+            随机获取n条问题接口,默认是10条
+            </summary>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.GetSearch(Answer.Application.Service.Question.Dto.QuestionInput)">
+            <summary>
+            模糊查询问题
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.GetSearchByType(Answer.Application.Service.Question.Dto.QuestionInput)">
+            <summary>
+            通过分类查询问题
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.PostFollow(System.Int64)">
+            <summary>
+            收藏问题接口
+            </summary>
+            <param name="questionId"></param>
+            <returns></returns>
+            <exception cref="T:Furion.FriendlyException.AppFriendlyException"></exception>
+        </member>
         <member name="P:Answer.Application.Service.User.Dto.UserInput.Account">
             <summary>
             账号
@@ -266,15 +376,153 @@
             </summary>
             <example>123456</example>
         </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.NickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.Sex">
+            <summary>
+            性别-男_1、女_2
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.Age">
+            <summary>
+            年龄
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.Birthday">
+            <summary>
+            出生日期
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.Nation">
+            <summary>
+            民族
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.Phone">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInput.Introduction">
+            <summary>
+            个人简介
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserOutput.Account">
+            <summary>
+            账号
+            </summary>
+            <example>admin</example>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserOutput.NickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserOutput.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserOutput.Sex">
+            <summary>
+            性别-男_1、女_2
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserOutput.Age">
+            <summary>
+            年龄
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserOutput.Birthday">
+            <summary>
+            出生日期
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserOutput.Nation">
+            <summary>
+            民族
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserOutput.Phone">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserOutput.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserOutput.Introduction">
+            <summary>
+            个人简介
+            </summary>
+        </member>
         <member name="T:Answer.Application.Service.User.UserService">
             <summary>
             用户服务
             </summary>
         </member>
-        <member name="M:Answer.Application.Service.User.UserService.#ctor(Answer.Core.Repository{Answer.Application.Entity.User})">
+        <member name="M:Answer.Application.Service.User.UserService.#ctor(Answer.Core.Repository{Answer.Application.Entity.User},Answer.Core.Repository{Answer.Application.Entity.Question},Answer.Core.Repository{Answer.Application.Entity.UUMapping})">
             <summary>
             用户服务
             </summary>
+        </member>
+        <member name="M:Answer.Application.Service.User.UserService.Post(Answer.Application.Service.User.Dto.UserInput)">
+            <summary>
+            注册接口
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+            <exception cref="T:Furion.FriendlyException.AppFriendlyException"></exception>
+        </member>
+        <member name="M:Answer.Application.Service.User.UserService.Put(Answer.Application.Service.User.Dto.UserInput)">
+            <summary>
+            修改用户数据接口
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.User.UserService.Get(System.Int64)">
+            <summary>
+            获取用户数据接口
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.User.UserService.GetMe">
+            <summary>
+            获取自己的数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.User.UserService.GetQuestion(System.Int64)">
+            <summary>
+            获取用户的问题
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.User.UserService.PostFollow(System.Int64)">
+            <summary>
+            关注用户接口
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+            <exception cref="T:Furion.FriendlyException.AppFriendlyException"></exception>
         </member>
     </members>
 </doc>

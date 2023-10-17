@@ -1,5 +1,4 @@
-﻿
-using SqlSugar;
+﻿using SqlSugar;
 using Answer.Application.Entity;
 
 SqlSugarClient db = new SqlSugarClient(new ConnectionConfig()
@@ -12,4 +11,5 @@ SqlSugarClient db = new SqlSugarClient(new ConnectionConfig()
 
 
 db.DbMaintenance.CreateDatabase();
-db.CodeFirst.InitTables<User>();
+db.CodeFirst.InitTables<User, Question, Answer.Application.Entity.Answer>();
+db.CodeFirst.InitTables<UUMapping, UQMapping>();

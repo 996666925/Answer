@@ -8,6 +8,7 @@ public enum GenderEnum
     /// <summary>
     /// 男
     /// </summary>
+    /// <example>1</example>
     Male = 1,
 
     /// <summary>

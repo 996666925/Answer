@@ -1,7 +1,10 @@
-﻿using Furion;
+﻿using System;
+using System.Collections;
+using Furion;
 using SqlSugar;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+using System.Linq;
+using Furion.Logging.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Answer.Core;
@@ -19,7 +22,10 @@ public static class DbContext
         App.GetConfig<List<ConnectionConfig>>("ConnectionConfigs")
         , db =>
         {
-            
+            db.Aop.OnLogExecuting = (sql, pars) =>
+            {
+                UtilMethods.GetNativeSql(sql,pars).LogInformation();
+            };
             
             // 这里配置全局事件，比如拦截执行 SQL
         });

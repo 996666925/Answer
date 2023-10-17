@@ -1,11 +1,11 @@
 ﻿{
   "$schema": "https://gitee.com/dotnetchina/Furion/raw/v4/schemas/v4/furion-schema.json",
   "SpecificationDocumentSettings": {
-    "DocumentTitle": "慧问妙答系统",
+    "DocumentTitle": "慧问妙答系统接口文档",
     "GroupOpenApiInfos": [
       {
         "Group": "Default",
-        "Title": "慧问妙答系统",
+        "Title": "慧问妙答系统接口文档",
         "Description": "",
         "Version": "1.0.0"
       }

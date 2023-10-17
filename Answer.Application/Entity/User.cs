@@ -98,6 +98,11 @@ public class User : EntityBase
     [SugarColumn(ColumnDescription = "账号类型")]
     public UserTypeEnum AccountType { get; set; } = UserTypeEnum.NormalUser;
 
+    [Navigate(typeof(UQMapping), nameof(UQMapping.UserId), nameof(UQMapping.QuestionId))]
+    public List<Question> FollowQuestions { get; set; }
+
+    [Navigate(typeof(UUMapping), nameof(UUMapping.UserIdA), nameof(UUMapping.UserIdB))]
+    public List<User> FollowUsers { get; set; }
 
     /// <summary>
     /// 最新登录Ip
