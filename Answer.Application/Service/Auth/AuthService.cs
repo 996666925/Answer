@@ -47,7 +47,7 @@ public class AuthService
         // 生成Token令牌
         var accessToken = JWTEncryption.Encrypt(new Dictionary<string, object>
         {
-            { ClaimConst.UserId, user.Id },
+            { ClaimConst.UserId, Convert.ToString(user.Id) },
             { ClaimConst.Account, user.Account },
             { ClaimConst.AccountType, user.AccountType },
         });

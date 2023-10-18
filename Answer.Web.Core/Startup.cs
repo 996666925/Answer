@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Answer.Application.Service.Chat;
 using Answer.Core;
 using Furion;
@@ -19,11 +20,36 @@ public class Startup : AppStartup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddConsoleFormatter();
-        services.AddJwt<JwtHandler>();
+        services.AddJwt<JwtHandler>(
+            jwtBearerConfigure:(options =>
+            {
+
+                options.Events = new()
+                {
+                    OnMessageReceived = context =>
+                    {
+
+                        var assessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(assessToken) &&
+                            (path.StartsWithSegments("/chat")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = assessToken;
+                            
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
+            }));
         services.AddSqlsugar();
+        services.AddSingleton<IUserIdProvider, UserIdProvider>();
         services.AddSignalR();
         services.AddCorsAccessor();
-        services.AddSingleton<IUserIdProvider, UserIdProvider>();
+
         services.AddStackExchangeRedisExtensions<SystemTextJsonSerializer>(App.GetConfig<RedisConfiguration>("Redis"));
         services.AddControllers()
             .AddInjectWithUnifyResult().AddJsonOptions(options =>
@@ -52,7 +78,7 @@ public class Startup : AppStartup
 
         app.UseEndpoints(endpoints =>
         {
-        
+            endpoints.MapHubs();
             endpoints.MapControllers();
         });
     }

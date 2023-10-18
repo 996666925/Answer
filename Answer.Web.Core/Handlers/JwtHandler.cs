@@ -12,6 +12,7 @@ public class JwtHandler : AppAuthorizeHandler
     
     public override async Task HandleAsync(AuthorizationHandlerContext context)
     {
+        
         // 自动刷新 token
         if (JWTEncryption.AutoRefreshToken(context, context.GetCurrentHttpContext()))
         {
