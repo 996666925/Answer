@@ -4,8 +4,17 @@ using StackExchange.Redis.Extensions.Core.Abstractions;
 
 namespace Answer.Application.Service.Chat;
 
+
+/// <summary>
+/// 用户通信相关接口
+/// </summary>
+/// <param name="redisDatabase"></param>
 public class ChatService(IRedisDatabase redisDatabase) : IDynamicApiController
 {
+    /// <summary>
+    /// 告诉服务器，用户已经查看最新消息
+    /// </summary>
+    /// <param name="userId"></param>
     public async void Put(long userId)
     {
         var key = ChatUtils.GetKey(userId);
@@ -15,6 +24,11 @@ public class ChatService(IRedisDatabase redisDatabase) : IDynamicApiController
     }
 
 
+    /// <summary>
+    /// 获取用户的消息记录，参数是对方的id
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     public async Task<Object> Get(long userId)
     {
         var key = ChatUtils.GetKey(userId);

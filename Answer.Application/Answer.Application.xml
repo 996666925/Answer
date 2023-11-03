@@ -220,7 +220,7 @@
             评论服务
             </summary>
         </member>
-        <member name="M:Answer.Application.Service.Answer.AnswerService.#ctor(Answer.Core.Repository{Answer.Application.Entity.Answer})">
+        <member name="M:Answer.Application.Service.Answer.AnswerService.#ctor(Answer.Core.Repository{Answer.Application.Entity.Answer},Answer.Core.Repository{Answer.Application.Entity.Question})">
             <summary>
             评论服务
             </summary>
@@ -305,14 +305,39 @@
             刷新Token
             </summary>
         </member>
+        <member name="T:Answer.Application.Service.Chat.ChatService">
+            <summary>
+            用户通信相关接口
+            </summary>
+            <param name="redisDatabase"></param>
+        </member>
+        <member name="M:Answer.Application.Service.Chat.ChatService.#ctor(StackExchange.Redis.Extensions.Core.Abstractions.IRedisDatabase)">
+            <summary>
+            用户通信相关接口
+            </summary>
+            <param name="redisDatabase"></param>
+        </member>
+        <member name="M:Answer.Application.Service.Chat.ChatService.Put(System.Int64)">
+            <summary>
+            告诉服务器，用户已经查看最新消息
+            </summary>
+            <param name="userId"></param>
+        </member>
+        <member name="M:Answer.Application.Service.Chat.ChatService.Get(System.Int64)">
+            <summary>
+            获取用户的消息记录，参数是对方的id
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="T:Answer.Application.Service.Question.QuestionService">
             <summary>
-            问题服务
+            问题相关接口
             </summary>
         </member>
         <member name="M:Answer.Application.Service.Question.QuestionService.#ctor(Answer.Core.Repository{Answer.Application.Entity.Question},Answer.Core.Repository{Answer.Application.Entity.Answer},Answer.Core.Repository{Answer.Application.Entity.UQMapping})">
             <summary>
-            问题服务
+            问题相关接口
             </summary>
         </member>
         <member name="M:Answer.Application.Service.Question.QuestionService.Post(Answer.Application.Service.Question.Dto.QuestionDto)">
@@ -323,7 +348,7 @@
         </member>
         <member name="M:Answer.Application.Service.Question.QuestionService.Get(System.Int64)">
             <summary>
-            查询问题接口
+            查询问题详情接口
             </summary>
             <param name="questionId"></param>
         </member>
@@ -335,11 +360,13 @@
             <returns></returns>
             <exception cref="T:Furion.FriendlyException.AppFriendlyException"></exception>
         </member>
-        <member name="M:Answer.Application.Service.Question.QuestionService.GetRandom(System.Int32)">
+        <member name="M:Answer.Application.Service.Question.QuestionService.GetList(Answer.Application.Const.OrderEnum,System.Int32,System.Int32)">
             <summary>
-            随机获取n条问题接口,默认是10条
+            查询问题列表，0是根据活跃，1是根据发布时间，2是根据浏览数量，3是未回答，默认是10条
             </summary>
+            <param name="order"></param>   
             <param name="count"></param>
+            <param name="pageIndex"></param>
             <returns></returns>
         </member>
         <member name="M:Answer.Application.Service.Question.QuestionService.GetSearch(Answer.Application.Service.Question.Dto.QuestionInput)">
@@ -351,7 +378,7 @@
         </member>
         <member name="M:Answer.Application.Service.Question.QuestionService.GetSearchByType(Answer.Application.Service.Question.Dto.QuestionInput)">
             <summary>
-            通过分类查询问题
+            通过标签查询问题
             </summary>
             <param name="input"></param>
             <returns></returns>
@@ -363,6 +390,58 @@
             <param name="questionId"></param>
             <returns></returns>
             <exception cref="T:Furion.FriendlyException.AppFriendlyException"></exception>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.PutGood(System.Int64)">
+            <summary>
+            点赞接口
+            </summary>
+            <param name="questionId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInfo.NickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInfo.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInfo.Sex">
+            <summary>
+            性别-男_1、女_2
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInfo.Age">
+            <summary>
+            年龄
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInfo.Birthday">
+            <summary>
+            出生日期
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInfo.Nation">
+            <summary>
+            民族
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInfo.Phone">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInfo.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.User.Dto.UserInfo.Introduction">
+            <summary>
+            个人简介
+            </summary>
         </member>
         <member name="P:Answer.Application.Service.User.Dto.UserInput.Account">
             <summary>
@@ -474,12 +553,12 @@
         </member>
         <member name="T:Answer.Application.Service.User.UserService">
             <summary>
-            用户服务
+            用户相关接口
             </summary>
         </member>
         <member name="M:Answer.Application.Service.User.UserService.#ctor(Answer.Core.Repository{Answer.Application.Entity.User},Answer.Core.Repository{Answer.Application.Entity.Question},Answer.Core.Repository{Answer.Application.Entity.UUMapping})">
             <summary>
-            用户服务
+            用户相关接口
             </summary>
         </member>
         <member name="M:Answer.Application.Service.User.UserService.Post(Answer.Application.Service.User.Dto.UserInput)">
@@ -490,7 +569,7 @@
             <returns></returns>
             <exception cref="T:Furion.FriendlyException.AppFriendlyException"></exception>
         </member>
-        <member name="M:Answer.Application.Service.User.UserService.Put(Answer.Application.Service.User.Dto.UserInput)">
+        <member name="M:Answer.Application.Service.User.UserService.Put(Answer.Application.Service.User.Dto.UserInfo)">
             <summary>
             修改用户数据接口
             </summary>

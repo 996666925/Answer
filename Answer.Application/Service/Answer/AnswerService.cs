@@ -5,7 +5,8 @@ namespace Answer.Application.Service.Answer;
 /// <summary>
 /// 评论服务
 /// </summary>
-public class AnswerService(Repository<Entity.Answer> answerRepository) : IDynamicApiController
+public class AnswerService
+    (Repository<Entity.Answer> answerRepository, Repository<Entity.Question> questionRepository) : IDynamicApiController
 {
     /// <summary>
     /// 创建评论接口
@@ -16,7 +17,11 @@ public class AnswerService(Repository<Entity.Answer> answerRepository) : IDynami
     {
         answerDto.UserId = Convert.ToInt64(App.User.FindFirstValue(ClaimConst.UserId));
 
-        return await answerRepository.InsertReturnSnowflakeIdAsync(answerDto.Adapt<Entity.Answer>());
+        var id = await answerRepository.InsertReturnSnowflakeIdAsync(answerDto.Adapt<Entity.Answer>());
+        await questionRepository.AsUpdateable().Where(p => p.Id == answerDto.ParentId)
+            .SetColumns((q) => q.AnswerCount == q.AnswerCount + 1).ExecuteCommandAsync();
+
+        return id;
     }
 
     /// <summary>

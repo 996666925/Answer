@@ -3,11 +3,12 @@ using Answer.Application.Entity;
 using Answer.Application.Enum;
 using Answer.Application.Service.Question.Dto;
 using Answer.Application.Service.User.Dto;
+using Furion.LinqBuilder;
 
 namespace Answer.Application.Service.Question;
 
 /// <summary>
-/// 问题服务
+/// 问题相关接口
 /// </summary>
 public class QuestionService
 (Repository<Entity.Question> questionRepository, Repository<Entity.Answer> answerRepository,
@@ -26,7 +27,7 @@ public class QuestionService
     }
 
     /// <summary>
-    /// 查询问题接口
+    /// 查询问题详情接口
     /// </summary>
     /// <param name="questionId"></param>
     [Authorize]
@@ -39,6 +40,9 @@ public class QuestionService
 
         var answers = await answerRepository.AsQueryable().ToTreeAsync(a => a.Answers, a => a.ParentId, question.Id);
         question.Answers = answers;
+        await questionRepository.AsUpdateable().Where(p => p.Id == questionId)
+            .SetColumns((q) => q.Count == q.Count + 1).ExecuteCommandAsync();
+
         return question;
     }
 
@@ -56,7 +60,6 @@ public class QuestionService
         var question = await questionRepository.AsQueryable()
             .FirstAsync(u => u.Id == questionDto.Id && u.UserId == userId);
 
-
         _ = question ?? throw Oops.Oh(ErrorCodeEnum.Q0001);
 
         var result = await questionRepository.AsUpdateable(questionDto.Adapt<Entity.Question>())
@@ -73,17 +76,43 @@ public class QuestionService
 
 
     /// <summary>
-    /// 随机获取n条问题接口,默认是10条
+    /// 查询问题列表，0是根据活跃，1是根据发布时间，2是根据浏览数量，3是未回答，默认是10条
     /// </summary>
+    /// <param name="order"></param>   
     /// <param name="count"></param>
+    /// <param name="pageIndex"></param>
     /// <returns></returns>
-    [Authorize]
-    public async Task<List<Entity.Question>> GetRandom(int count = 10)
+    public async Task<Object> GetList([Required] OrderEnum order, int count = 10, int pageIndex = 0)
     {
-        var questionList = await questionRepository.AsQueryable().Take(count).OrderBy(st => SqlFunc.GetRandom())
-            .ToListAsync();
+        RefAsync<int> totalCount = 0;
 
-        return questionList;
+        var questionList = order switch
+        {
+            OrderEnum.Active =>
+                await questionRepository.AsQueryable().OrderBy(st => st.AnswerCount, OrderByType.Desc)
+                    .ToPageListAsync(pageIndex, count, totalCount),
+
+            OrderEnum.Latest =>
+                await questionRepository.AsQueryable().OrderBy(st => st.UpdateTime, OrderByType.Desc)
+                    .ToPageListAsync(pageIndex, count, totalCount),
+
+            OrderEnum.Frequent =>
+                await questionRepository.AsQueryable().OrderBy(st => st.Count, OrderByType.Desc)
+                    .ToPageListAsync(pageIndex, count, totalCount),
+
+            OrderEnum.Unanswered =>
+                await questionRepository.AsQueryable().Where(q => q.AnswerCount <= 0)
+                    .ToPageListAsync(pageIndex, count, totalCount),
+
+            _ => new()
+        };
+
+
+        return new
+        {
+            Questions = questionList,
+            Total = totalCount
+        };
     }
 
 
@@ -92,7 +121,6 @@ public class QuestionService
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    [Authorize]
     public async Task<QuestionVo> GetSearch([Required, FromQuery] QuestionInput input)
     {
         RefAsync<int> totalCount = 0;
@@ -109,16 +137,16 @@ public class QuestionService
 
 
     /// <summary>
-    /// 通过分类查询问题
+    /// 通过标签查询问题
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    [Authorize]
     public async Task<QuestionVo> GetSearchByType([Required, FromQuery] QuestionInput input)
     {
         RefAsync<int> totalCount = 0;
-        var questions = await questionRepository.AsQueryable()
-            .Where(it => SqlFunc.JsonArrayAny(it.Types, input.Content))
+        List<Entity.Question> questions = await questionRepository.AsQueryable()
+            .WhereIF(!input.Content.IsNullOrEmpty(), it => SqlFunc.JsonArrayAny(it.Types, input.Content))
+            .WhereIF(input.Content.IsNullOrEmpty(), it => !SqlFunc.JsonLike(it.Types, "[]"))
             .ToPageListAsync(input.PageIndex, input.PageSize, totalCount);
 
         return new()
@@ -147,5 +175,19 @@ public class QuestionService
         var result = await mappingRepository.InsertAsync(new() { UserId = userId, QuestionId = question.Id });
 
         return result ? "收藏成功" : "收藏失败";
+    }
+
+    /// <summary>
+    /// 点赞接口
+    /// </summary>
+    /// <param name="questionId"></param>
+    /// <returns></returns>
+    [Authorize]
+    public async Task<string> PutGood(long questionId)
+    {
+        await questionRepository.AsUpdateable().Where(p => p.Id == questionId)
+            .SetColumns((q) => q.Voters == q.Voters + 1).ExecuteCommandAsync();
+
+        return "点赞成功";
     }
 }

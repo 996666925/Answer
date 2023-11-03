@@ -1,13 +1,15 @@
 ﻿using System.Security.Claims;
 using Answer.Application.Entity;
 using Answer.Application.Enum;
+using Answer.Application.Service.Auth.Dto;
 using Answer.Application.Service.User.Dto;
+using Answer.Application.Utils;
 
 
 namespace Answer.Application.Service.User;
 
 /// <summary>
-/// 用户服务
+/// 用户相关接口
 /// </summary>
 public class UserService
 (Repository<Entity.User> userRepository, Repository<Entity.Question> questionRepository,
@@ -19,7 +21,7 @@ public class UserService
     /// <param name="input"></param>
     /// <returns></returns>
     /// <exception cref="AppFriendlyException"></exception>
-    public async Task<string> Post([Required] UserInput input)
+    public async Task<LoginOutput> Post([Required] UserInput input)
     {
         var user = await userRepository.GetFirstAsync(u => u.Account == input.Account);
 
@@ -32,7 +34,7 @@ public class UserService
         await userRepository.InsertReturnSnowflakeIdAsync(input.Adapt<Entity.User>());
 
 
-        return UserConst.RegisterOk;
+        return input.GetToken().Adapt<LoginOutput>();
     }
 
     /// <summary>
@@ -41,7 +43,7 @@ public class UserService
     /// <param name="input"></param>
     /// <returns></returns>
     [Authorize]
-    public async Task<string> Put([Required] UserInput input)
+    public async Task<string> Put([Required] UserInfo input)
     {
         var user = input.Adapt<Entity.User>();
         var account = App.User.FindFirstValue(ClaimConst.Account);

@@ -16,9 +16,17 @@ public class Question : EntityBase
     [Navigate(NavigateType.OneToOne, nameof(UserId))]
     public User User { get; set; }
 
-    [SugarColumn(IsJson = true)] public List<string> Types { get; set; } 
+    [SugarColumn(IsJson = true)] public List<string> Types { get; set; }
     [SugarColumn(IsIgnore = true)] public List<Answer> Answers { get; set; }
 
+    [SugarColumn(ColumnDescription = "评论数量")]
+    public int AnswerCount { get; set; } = 0;
+
     [SugarColumn(ColumnDescription = "点赞数量")]
-    public int Voters { get; set; }
+
+    public int Voters { get; set; } = 0;
+
+    [SugarColumn(ColumnDescription = "浏览次数")]
+
+    public int Count { get; set; } = 0;
 }

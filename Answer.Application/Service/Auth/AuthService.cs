@@ -33,8 +33,14 @@ public class AuthService
         if (user.Password != MD5Encryption.Encrypt(input.Password))
             throw Oops.Oh(ErrorCodeEnum.D0003);
 
-        return CreateToken(user);
+        var result = CreateToken(user);
+
+        httpContextAccessor.HttpContext.Response.Headers["access-token"] = result.AccessToken;
+        httpContextAccessor.HttpContext.Response.Headers["x-access-token"] = result.RefreshToken;
+
+        return result;
     }
+
 
     /// <summary>
     /// 生成Token令牌
@@ -42,7 +48,7 @@ public class AuthService
     /// <param name="user"></param>
     /// <returns></returns>
     [NonAction]
-    public LoginOutput CreateToken(Entity.User user)
+    public static LoginOutput CreateToken(Entity.User user)
     {
         // 生成Token令牌
         var accessToken = JWTEncryption.Encrypt(new Dictionary<string, object>
@@ -56,7 +62,7 @@ public class AuthService
         var refreshToken = JWTEncryption.GenerateRefreshToken(accessToken);
 
         // 设置响应报文头
-        httpContextAccessor.HttpContext.SetTokensOfResponseHeaders(accessToken, refreshToken);
+        // httpContextAccessor.HttpContext.SetTokensOfResponseHeaders(accessToken, refreshToken);
 
         return new LoginOutput
         {
