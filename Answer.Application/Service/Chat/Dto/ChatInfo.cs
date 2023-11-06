@@ -1,4 +1,4 @@
-﻿namespace Answer.Application.Service.Chat;
+﻿namespace Answer.Application.Service.Chat.Dto;
 
 
 

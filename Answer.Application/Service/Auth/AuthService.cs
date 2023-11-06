@@ -35,8 +35,7 @@ public class AuthService
 
         var result = CreateToken(user);
 
-        httpContextAccessor.HttpContext.Response.Headers["access-token"] = result.AccessToken;
-        httpContextAccessor.HttpContext.Response.Headers["x-access-token"] = result.RefreshToken;
+        httpContextAccessor.HttpContext.SetTokensOfResponseHeaders(result.AccessToken, result.RefreshToken);
 
         return result;
     }
@@ -60,10 +59,7 @@ public class AuthService
 
         // 生成刷新Token令牌
         var refreshToken = JWTEncryption.GenerateRefreshToken(accessToken);
-
-        // 设置响应报文头
-        // httpContextAccessor.HttpContext.SetTokensOfResponseHeaders(accessToken, refreshToken);
-
+        
         return new LoginOutput
         {
             AccessToken = accessToken,

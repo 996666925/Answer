@@ -1,4 +1,5 @@
-﻿using Furion.InstantMessaging;
+﻿using Answer.Application.Service.Chat.Dto;
+using Furion.InstantMessaging;
 using Furion.Logging.Extensions;
 using Microsoft.AspNetCore.SignalR;
 using StackExchange.Redis.Extensions.Core.Abstractions;
@@ -14,14 +15,6 @@ public interface IChatClient
 [Authorize]
 public class ChatHub(IRedisDatabase redisDatabase) : Hub<IChatClient>
 {
-    public override Task OnConnectedAsync()
-    {
-        "OnConnected".LogInformation();
-        Context.User!.FindFirstValue(ClaimConst.UserId).LogInformation();
-        return base.OnConnectedAsync();
-    }
-
-
 
     public async Task SendMessage(string userId, string message)
     {

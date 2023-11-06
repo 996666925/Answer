@@ -1,4 +1,5 @@
-﻿using Furion.ClayObject;
+﻿using Answer.Application.Service.Chat.Dto;
+using Furion.ClayObject;
 using StackExchange.Redis;
 using StackExchange.Redis.Extensions.Core.Abstractions;
 
@@ -27,11 +28,11 @@ public class ChatService(IRedisDatabase redisDatabase) : IDynamicApiController
     /// <summary>
     /// 获取用户的消息记录，参数是对方的id
     /// </summary>
-    /// <param name="userId"></param>
+    /// <param name="input"></param>
     /// <returns></returns>
-    public async Task<Object> Get(long userId)
+    public async Task<Object> Get([FromQuery] ChatInput input)
     {
-        var key = ChatUtils.GetKey(userId);
+        var key = ChatUtils.GetKey(input.UserId);
 
 
         var count = await redisDatabase.HashGetAsync<int>(key, "count");
@@ -41,7 +42,7 @@ public class ChatService(IRedisDatabase redisDatabase) : IDynamicApiController
         return new
         {
             Count = count,
-            Value = list
+            Value = list.Take(input.Count)
         };
     }
     

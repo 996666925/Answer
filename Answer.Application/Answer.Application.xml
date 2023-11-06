@@ -159,6 +159,11 @@
             评论不存在
             </summary>
         </member>
+        <member name="F:Answer.Application.Enum.ErrorCodeEnum.Q0003">
+            <summary>
+            已经点过赞了
+            </summary>
+        </member>
         <member name="T:Answer.Application.Enum.GenderEnum">
             <summary>
             性别枚举
@@ -220,7 +225,7 @@
             评论服务
             </summary>
         </member>
-        <member name="M:Answer.Application.Service.Answer.AnswerService.#ctor(Answer.Core.Repository{Answer.Application.Entity.Answer},Answer.Core.Repository{Answer.Application.Entity.Question})">
+        <member name="M:Answer.Application.Service.Answer.AnswerService.#ctor(Answer.Core.Repository{Answer.Application.Entity.Answer},Answer.Core.Repository{Answer.Application.Entity.Question},StackExchange.Redis.Extensions.Core.Abstractions.IRedisDatabase)">
             <summary>
             评论服务
             </summary>
@@ -239,6 +244,27 @@
             <param name="answerId"></param>
             <returns></returns>
             <exception cref="T:Furion.FriendlyException.AppFriendlyException"></exception>
+        </member>
+        <member name="M:Answer.Application.Service.Answer.AnswerService.PutGood(System.Int64)">
+            <summary>
+            点赞接口
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.Answer.AnswerService.GetCheckGood(System.Int64)">
+            <summary>
+            检查是否已经点赞
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.Answer.AnswerService.PutCancelGood(System.Int64)">
+            <summary>
+            取消点赞
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
         </member>
         <member name="T:Answer.Application.Service.Auth.AuthService">
             <summary>
@@ -323,19 +349,29 @@
             </summary>
             <param name="userId"></param>
         </member>
-        <member name="M:Answer.Application.Service.Chat.ChatService.Get(System.Int64)">
+        <member name="M:Answer.Application.Service.Chat.ChatService.Get(Answer.Application.Service.Chat.Dto.ChatInput)">
             <summary>
             获取用户的消息记录，参数是对方的id
             </summary>
-            <param name="userId"></param>
+            <param name="input"></param>
             <returns></returns>
+        </member>
+        <member name="P:Answer.Application.Service.Chat.Dto.ChatInput.UserId">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:Answer.Application.Service.Chat.Dto.ChatInput.Count">
+            <summary>
+            用户未查看的消息数
+            </summary>
         </member>
         <member name="T:Answer.Application.Service.Question.QuestionService">
             <summary>
             问题相关接口
             </summary>
         </member>
-        <member name="M:Answer.Application.Service.Question.QuestionService.#ctor(Answer.Core.Repository{Answer.Application.Entity.Question},Answer.Core.Repository{Answer.Application.Entity.Answer},Answer.Core.Repository{Answer.Application.Entity.UQMapping})">
+        <member name="M:Answer.Application.Service.Question.QuestionService.#ctor(Answer.Core.Repository{Answer.Application.Entity.Question},Answer.Core.Repository{Answer.Application.Entity.Answer},Answer.Core.Repository{Answer.Application.Entity.UQMapping},StackExchange.Redis.Extensions.Core.Abstractions.IRedisDatabase)">
             <summary>
             问题相关接口
             </summary>
@@ -394,6 +430,20 @@
         <member name="M:Answer.Application.Service.Question.QuestionService.PutGood(System.Int64)">
             <summary>
             点赞接口
+            </summary>
+            <param name="questionId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.GetCheckGood(System.Int64)">
+            <summary>
+            检查是否已经点赞
+            </summary>
+            <param name="questionId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Answer.Application.Service.Question.QuestionService.PutCancelGood(System.Int64)">
+            <summary>
+            取消点赞
             </summary>
             <param name="questionId"></param>
             <returns></returns>

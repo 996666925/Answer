@@ -16,4 +16,9 @@ public class Answer : EntityBase
 
     [SugarColumn(ColumnDescription = "评论内容")]
     public string Content { get; set; }
+    
+    [SugarColumn(ColumnDescription = "点赞数量")]
+
+    public int Voters { get; set; } = 0;
+    
 }

@@ -3,7 +3,9 @@ using Answer.Application.Entity;
 using Answer.Application.Enum;
 using Answer.Application.Service.Question.Dto;
 using Answer.Application.Service.User.Dto;
+using Answer.Application.Utils;
 using Furion.LinqBuilder;
+using StackExchange.Redis.Extensions.Core.Abstractions;
 
 namespace Answer.Application.Service.Question;
 
@@ -12,7 +14,7 @@ namespace Answer.Application.Service.Question;
 /// </summary>
 public class QuestionService
 (Repository<Entity.Question> questionRepository, Repository<Entity.Answer> answerRepository,
-    Repository<UQMapping> mappingRepository) : IDynamicApiController
+    Repository<UQMapping> mappingRepository, IRedisDatabase redisDatabase) : IDynamicApiController
 {
     /// <summary>
     /// 创建问题接口
@@ -188,6 +190,56 @@ public class QuestionService
         await questionRepository.AsUpdateable().Where(p => p.Id == questionId)
             .SetColumns((q) => q.Voters == q.Voters + 1).ExecuteCommandAsync();
 
+        string key = KeyUtils.GetKey(questionId);
+
+        var isGood = await redisDatabase.HashGetAsync<bool>("QuestionGoods", key);
+        if (isGood)
+        {
+            throw Oops.Oh(ErrorCodeEnum.Q0003);
+        }
+
+        await redisDatabase.HashSetAsync("QuestionGoods", key, true);
         return "点赞成功";
+    }
+
+    /// <summary>
+    /// 检查是否已经点赞
+    /// </summary>
+    /// <param name="questionId"></param>
+    /// <returns></returns>
+    [Authorize]
+    public async Task<Object> GetCheckGood(long questionId)
+    {
+        string key = KeyUtils.GetKey(questionId);
+
+        var isGood = await redisDatabase.HashGetAsync<bool>("QuestionGoods", key);
+
+        return new
+        {
+            isGood
+        };
+    }
+    
+    /// <summary>
+    /// 取消点赞
+    /// </summary>
+    /// <param name="questionId"></param>
+    /// <returns></returns>
+    [Authorize]
+    public async Task<string> PutCancelGood(long questionId)
+    {
+        string key = KeyUtils.GetKey(questionId);
+
+        var isGood = await redisDatabase.HashGetAsync<bool>("QuestionGoods", key);
+
+        if (isGood)
+        {
+            await redisDatabase.HashSetAsync("QuestionGoods", key, false);
+            await questionRepository.AsUpdateable().Where(p => p.Id == questionId)
+                .SetColumns((q) => q.Voters == q.Voters - 1).ExecuteCommandAsync();
+        }
+
+
+        return "取消点赞成功";
     }
 }

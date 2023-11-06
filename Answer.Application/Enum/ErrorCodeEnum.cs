@@ -42,4 +42,10 @@ public enum ErrorCodeEnum
     /// </summary>
     [ErrorCodeItemMetadata("评论不存在")]
     Q0002,
+    
+    /// <summary>
+    /// 已经点过赞了
+    /// </summary>
+    [ErrorCodeItemMetadata("已经点过赞了")]
+    Q0003,
 }

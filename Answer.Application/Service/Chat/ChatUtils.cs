@@ -1,6 +1,6 @@
 ﻿namespace Answer.Application.Service.Chat;
 
-public class ChatUtils
+public static class ChatUtils
 {
     public static string GetKey(string otherId)
     {
